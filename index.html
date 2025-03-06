@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>播客App原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .prototype-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            border: 10px solid #000;
+            position: relative;
+        }
+        .phone-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .screen-name {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gray-100 min-h-screen">
+        <header class="bg-white shadow">
+            <div class="max-w-7xl mx-auto py-6 px-4">
+                <h1 class="text-3xl font-bold text-gray-900">播客App - 高保真原型</h1>
+                <p class="mt-1 text-gray-500">类似小宇宙的播客应用界面设计</p>
+            </div>
+        </header>
+
+        <main>
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="prototype-container">
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="home.html" title="首页"></iframe>
+                        </div>
+                        <div class="screen-name">首页</div>
+                    </div>
+                    
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="subscription.html" title="订阅"></iframe>
+                        </div>
+                        <div class="screen-name">订阅页</div>
+                    </div>
+                    
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="player.html" title="播放器"></iframe>
+                        </div>
+                        <div class="screen-name">播放器</div>
+                    </div>
+                    
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="podcast_detail.html" title="播客详情"></iframe>
+                        </div>
+                        <div class="screen-name">播客详情</div>
+                    </div>
+                    
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="search.html" title="搜索"></iframe>
+                        </div>
+                        <div class="screen-name">搜索</div>
+                    </div>
+                    
+                    <div>
+                        <div class="phone-frame">
+                            <iframe src="profile.html" title="个人中心"></iframe>
+                        </div>
+                        <div class="screen-name">个人中心</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html> 

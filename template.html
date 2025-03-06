@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>播客App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="time">12:30</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- App 标题栏 -->
+    <div class="app-header">
+        <div class="header-left">
+            <!-- 页面特定的左侧元素 -->
+        </div>
+        <div class="header-title">
+            <!-- 页面标题 -->
+        </div>
+        <div class="header-right">
+            <!-- 页面特定的右侧元素 -->
+        </div>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="content-area">
+        <!-- 页面特定内容 -->
+    </div>
+    
+    <!-- 迷你播放器 -->
+    <div class="mini-player">
+        <div class="podcast-cover">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="播客封面">
+        </div>
+        <div class="podcast-info">
+            <div class="podcast-title">正在播放的节目标题</div>
+            <div class="podcast-creator">播客创作者</div>
+        </div>
+        <div class="controls">
+            <button class="play-pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="next">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item active" data-target="home.html">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="tab-item" data-target="subscription.html">
+            <i class="fas fa-headphones"></i>
+            <span>订阅</span>
+        </div>
+        <div class="tab-item" data-target="search.html">
+            <i class="fas fa-search"></i>
+            <span>搜索</span>
+        </div>
+        <div class="tab-item" data-target="profile.html">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+    
+    <script src="js/common.js"></script>
+</body>
+</html> 

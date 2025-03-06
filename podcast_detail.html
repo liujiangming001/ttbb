@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>播客详情 - 播客App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .podcast-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .podcast-header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px);
+            opacity: 0.7;
+            z-index: 1;
+        }
+        
+        .podcast-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+            z-index: 2;
+        }
+        
+        .podcast-header-content {
+            position: relative;
+            z-index: 3;
+            padding: 20px;
+            display: flex;
+            height: 100%;
+        }
+        
+        .podcast-cover {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-right: 15px;
+        }
+        
+        .podcast-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .podcast-brief {
+            flex: 1;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .podcast-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .podcast-creator {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+        
+        .podcast-stats {
+            display: flex;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .podcast-stat {
+            margin-right: 15px;
+        }
+        
+        .podcast-stat i {
+            margin-right: 4px;
+        }
+        
+        .podcast-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .subscribe-btn {
+            background-color: #ff4f5e;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .action-buttons {
+            display: flex;
+        }
+        
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+        }
+        
+        .podcast-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .podcast-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .podcast-tab.active {
+            color: #ff4f5e;
+            border-bottom: 2px solid #ff4f5e;
+        }
+        
+        .episode-list {
+            padding: 15px;
+        }
+        
+        .episode-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .episode-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .episode-date {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .episode-duration {
+            color: #888;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .episode-duration i {
+            margin-right: 4px;
+        }
+        
+        .episode-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .episode-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .episode-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .episode-actions {
+            display: flex;
+        }
+        
+        .episode-action {
+            color: #666;
+            margin-right: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .episode-action i {
+            margin-right: 5px;
+        }
+        
+        .play-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ff4f5e;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(255, 79, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="time">12:30</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- App 标题栏 -->
+    <div class="app-header">
+        <div class="header-left">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">
+            播客详情
+        </div>
+        <div class="header-right">
+            <i class="fas fa-ellipsis-h"></i>
+        </div>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="content-area" style="padding-top: 0;">
+        <!-- 播客头部信息 -->
+        <div class="podcast-header">
+            <div class="podcast-header-bg" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+');"></div>
+            <div class="podcast-header-overlay"></div>
+            <div class="podcast-header-content">
+                <div class="podcast-cover">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="科技新视界">
+                </div>
+                <div class="podcast-brief">
+                    <div class="podcast-title">科技新视界</div>
+                    <div class="podcast-creator">未来研究员</div>
+                    <div class="podcast-stats">
+                        <div class="podcast-stat">
+                            <i class="fas fa-headphones"></i>
+                            <span>243集</span>
+                        </div>
+                        <div class="podcast-stat">
+                            <i class="fas fa-users"></i>
+                            <span>15.6万订阅</span>
+                        </div>
+                        <div class="podcast-stat">
+                            <i class="fas fa-star"></i>
+                            <span>4.8分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 播客操作区 -->
+        <div class="podcast-actions">
+            <button class="subscribe-btn">已订阅</button>
+            <div class="action-buttons">
+                <div class="action-btn">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <div class="action-btn">
+                    <i class="far fa-heart"></i>
+                </div>
+                <div class="action-btn">
+                    <i class="fas fa-download"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 播客标签页 -->
+        <div class="podcast-tabs">
+            <div class="podcast-tab active">节目</div>
+            <div class="podcast-tab">详情</div>
+            <div class="podcast-tab">评论</div>
+        </div>
+        
+        <!-- 节目列表 -->
+        <div class="episode-list">
+            <div class="episode-item">
+                <div class="episode-header">
+                    <div class="episode-date">2023年6月15日</div>
+                    <div class="episode-duration">
+                        <i class="far fa-clock"></i>
+                        <span>48分钟</span>
+                    </div>
+                </div>
+                <div class="episode-title">E89: AI革命与未来职业</div>
+                <div class="episode-description">
+                    本期节目我们邀请了AI领域的专家张教授，探讨人工智能技术如何改变未来的工作方式和职业选择。我们讨论了哪些工作可能被AI取代，哪些新职业会因AI发展而诞生，以及个人如何为这场变革做好准备。
+                </div>
+                <div class="episode-footer">
+                    <div class="episode-actions">
+                        <div class="episode-action">
+                            <i class="far fa-comment-alt"></i>
+                            <span>134</span>
+                        </div>
+                        <div class="episode-action">
+                            <i class="far fa-heart"></i>
+                            <span>2.3k</span>
+                        </div>
+                    </div>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="episode-item">
+                <div class="episode-header">
+                    <div class="episode-date">2023年6月8日</div>
+                    <div class="episode-duration">
+                        <i class="far fa-clock"></i>
+                        <span>52分钟</span>
+                    </div>
+                </div>
+                <div class="episode-title">E88: 元宇宙的商业机遇</div>
+                <div class="episode-description">
+                    元宇宙被认为是互联网的下一个形态，本期节目我们深入探讨元宇宙给各行各业带来的商业机遇。从游戏、社交、教育到商业会议，元宇宙正在重塑我们与数字世界的互动方式。
+                </div>
+                <div class="episode-footer">
+                    <div class="episode-actions">
+                        <div class="episode-action">
+                            <i class="far fa-comment-alt"></i>
+                            <span>98</span>
+                        </div>
+                        <div class="episode-action">
+                            <i class="far fa-heart"></i>
+                            <span>1.8k</span>
+                        </div>
+                    </div>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="episode-item">
+                <div class="episode-header">
+                    <div class="episode-date">2023年6月1日</div>
+                    <div class="episode-duration">
+                        <i class="far fa-clock"></i>
+                        <span>45分钟</span>
+                    </div>
+                </div>
+                <div class="episode-title">E87: 可穿戴设备的健康革命</div>
+                <div class="episode-description">
+                    从智能手表到健康监测手环，可穿戴设备正在改变我们监测和管理健康的方式。本期节目我们邀请了医疗技术专家李博士，讨论这些设备如何帮助我们更好地了解自己的身体状况。
+                </div>
+                <div class="episode-footer">
+                    <div class="episode-actions">
+                        <div class="episode-action">
+                            <i class="far fa-comment-alt"></i>
+                            <span>76</span>
+                        </div>
+                        <div class="episode-action">
+                            <i class="far fa-heart"></i>
+                            <span>1.5k</span>
+                        </div>
+                    </div>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="episode-item">
+                <div class="episode-header">
+                    <div class="episode-date">2023年5月25日</div>
+                    <div class="episode-duration">
+                        <i class="far fa-clock"></i>
+                        <span>50分钟</span>
+                    </div>
+                </div>
+                <div class="episode-title">E86: 数字隐私与数据安全</div>
+                <div class="episode-description">
+                    在数字时代，我们的个人信息无处不在。本期节目讨论了数字隐私的重要性，以及如何在享受科技便利的同时保护自己的数据安全。我们还邀请了网络安全专家分享实用的保护策略。
+                </div>
+                <div class="episode-footer">
+                    <div class="episode-actions">
+                        <div class="episode-action">
+                            <i class="far fa-comment-alt"></i>
+                            <span>112</span>
+                        </div>
+                        <div class="episode-action">
+                            <i class="far fa-heart"></i>
+                            <span>2.1k</span>
+                        </div>
+                    </div>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 迷你播放器 -->
+    <div class="mini-player">
+        <div class="podcast-cover">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+';" alt="播客封面">
+        </div>
+        <div class="podcast-info">
+            <div class="podcast-title">正在播放的节目标题</div>
+            <div class="podcast-creator">播客创作者</div>
+        </div>
+        <div class="controls">
+            <button class="play-pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="next">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-target="home.html">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="tab-item" data-target="subscription.html">
+            <i class="fas fa-headphones"></i>
+            <span>订阅</span>
+        </div>
+        <div class="tab-item" data-target="search.html">
+            <i class="fas fa-search"></i>
+            <span>搜索</span>
+        </div>
+        <div class="tab-item" data-target="profile.html">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+    
+    <script src="js/common.js"></script>
+</body>
+</html> 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>创建播客图片</title>
+    <style>
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>播客图片生成器</h1>
+    
+    <canvas id="podcast1" width="400" height="400"></canvas>
+    <canvas id="podcast2" width="400" height="400"></canvas>
+    <canvas id="podcast3" width="400" height="400"></canvas>
+    <canvas id="podcast4" width="400" height="400"></canvas>
+    <canvas id="profile" width="200" height="200"></canvas>
+    
+    <button onclick="downloadImages()">下载所有图片</button>
+    
+    <script>
+        // 颜色数组
+        const colors = [
+            ['#FF5E5B', '#D8D8D8'],
+            ['#8DA9C4', '#EEF4ED'],
+            ['#FFBA08', '#FFFFFF'],
+            ['#6B9080', '#CCE3DE'],
+            ['#9B5DE5', '#F1E3F3']
+        ];
+        
+        // 绘制播客封面
+        function drawPodcastCover(canvasId, colorIndex) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // 背景
+            ctx.fillStyle = colors[colorIndex][0];
+            ctx.fillRect(0, 0, width, height);
+            
+            // 添加一些设计元素
+            ctx.fillStyle = colors[colorIndex][1];
+            ctx.beginPath();
+            ctx.arc(width/2, height/2, width/3, 0, Math.PI*2);
+            ctx.fill();
+            
+            // 添加文本
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`播客 ${colorIndex+1}`, width/2, height/2);
+            
+            ctx.font = '20px Arial';
+            ctx.fillText('示例封面', width/2, height/2 + 40);
+        }
+        
+        // 绘制用户头像
+        function drawProfilePic() {
+            const canvas = document.getElementById('profile');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // 背景
+            ctx.fillStyle = '#F5F5F5';
+            ctx.fillRect(0, 0, width, height);
+            
+            // 添加头像轮廓
+            ctx.fillStyle = '#8DA9C4';
+            ctx.beginPath();
+            ctx.arc(width/2, height/2 - 10, width/4, 0, Math.PI*2);
+            ctx.fill();
+            
+            // 添加身体轮廓
+            ctx.beginPath();
+            ctx.arc(width/2, height + width/4, width/2, 0, Math.PI, true);
+            ctx.fill();
+        }
+        
+        // 下载图片
+        function downloadImage(canvasId, fileName) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = canvas.toDataURL('image/jpeg', 0.9);
+            link.click();
+        }
+        
+        // 下载所有图片
+        function downloadImages() {
+            downloadImage('podcast1', 'podcast1.jpg');
+            downloadImage('podcast2', 'podcast2.jpg');
+            downloadImage('podcast3', 'podcast3.jpg');
+            downloadImage('podcast4', 'podcast4.jpg');
+            downloadImage('profile', 'profile.jpg');
+        }
+        
+        // 初始化
+        window.onload = function() {
+            drawPodcastCover('podcast1', 0);
+            drawPodcastCover('podcast2', 1);
+            drawPodcastCover('podcast3', 2);
+            drawPodcastCover('podcast4', 3);
+            drawProfilePic();
+        };
+    </script>
+</body>
+</html> 

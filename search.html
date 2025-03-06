@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索 - 播客App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .search-header {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            position: sticky;
+            top: 44px;
+            z-index: 40;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-bar {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-right: 12px;
+        }
+        
+        .search-bar i {
+            color: #888;
+            margin-right: 8px;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .cancel-button {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .search-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .search-tab.active {
+            color: #ff4f5e;
+            border-bottom: 2px solid #ff4f5e;
+        }
+        
+        .search-history {
+            padding: 16px;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .history-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .clear-button {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .history-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .history-item {
+            display: flex;
+            align-items: center;
+            background-color: #f1f1f1;
+            border-radius: 16px;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        .history-item i {
+            color: #888;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        
+        .recommended-topics {
+            padding: 16px;
+        }
+        
+        .topic-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .topic-item {
+            position: relative;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .topic-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .topic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .search-results {
+            padding: 16px;
+        }
+        
+        .result-count {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        /* 搜索结果为空的样式 */
+        .empty-search {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 0;
+        }
+        
+        .empty-search i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+        
+        .empty-search .message {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        
+        .empty-search .sub-message {
+            font-size: 14px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="time">12:30</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 搜索头部 -->
+    <div class="search-header">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" placeholder="搜索播客、主题或创作者">
+        </div>
+        <div class="cancel-button">取消</div>
+    </div>
+    
+    <!-- 搜索标签页 -->
+    <div class="search-tabs">
+        <div class="search-tab active">热门</div>
+        <div class="search-tab">播客</div>
+        <div class="search-tab">节目</div>
+        <div class="search-tab">创作者</div>
+    </div>
+    
+    <!-- 内容区域 - 初始状态 -->
+    <div class="content-area" style="padding: 0;">
+        <!-- 搜索历史 -->
+        <div class="search-history">
+            <div class="history-header">
+                <div class="history-title">搜索历史</div>
+                <div class="clear-button">清除</div>
+            </div>
+            <div class="history-list">
+                <div class="history-item">
+                    <i class="fas fa-history"></i>
+                    <span>科技新闻</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-history"></i>
+                    <span>心理学</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-history"></i>
+                    <span>睡前故事</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-history"></i>
+                    <span>创业经验</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-history"></i>
+                    <span>财经分析</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 推荐主题 -->
+        <div class="recommended-topics">
+            <div class="topic-title">热门主题</div>
+            <div class="topic-grid">
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuenkeWtpjwvdGV4dD48L3N2Zz4=" alt="科学">
+                    <div class="topic-overlay">科学</div>
+                </div>
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojOERBOUM0Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0VFRjRFRCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuWVhuS4mjwvdGV4dD48L3N2Zz4=" alt="商业">
+                    <div class="topic-overlay">商业</div>
+                </div>
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkZCQTA4Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0ZGRkZGRiIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuenkeaKgDwvdGV4dD48L3N2Zz4=" alt="科技">
+                    <div class="topic-overlay">科技</div>
+                </div>
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojNkI5MDgwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0NDRTNERSIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuWKnuWFrDwvdGV4dD48L3N2Zz4=" alt="健康">
+                    <div class="topic-overlay">健康</div>
+                </div>
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojOUI1REU1Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0YxRTNGMyIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaVmeWKmzwvdGV4dD48L3N2Zz4=" alt="教育">
+                    <div class="topic-overlay">教育</div>
+                </div>
+                <div class="topic-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojOERBOUM0Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0VFRjRFRCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPumfs+S5kDwvdGV4dD48L3N2Zz4=" alt="音乐">
+                    <div class="topic-overlay">音乐</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果 (默认隐藏，有搜索输入时显示) -->
+        <div class="search-results" style="display: none;">
+            <div class="result-count">找到 24 个结果</div>
+            
+            <!-- 播客结果 -->
+            <div class="podcast-list">
+                <div class="podcast-list-item">
+                    <div class="podcast-cover-small">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuenkeaKgOaWsOinhumikTwvdGV4dD48L3N2Zz4=" alt="科技新视界">
+                    </div>
+                    <div class="podcast-info">
+                        <div class="podcast-title">科技新视界</div>
+                        <div class="podcast-description">每周深度解析科技行业动态，探讨前沿技术趋势</div>
+                    </div>
+                    <div class="play-button play-button-small">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                
+                <div class="podcast-list-item">
+                    <div class="podcast-cover-small">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojOERBOUM0Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0VFRjRFRCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuenkeaKgOaXqeeUqOmCozwvdGV4dD48L3N2Zz4=" alt="科技早知道">
+                    </div>
+                    <div class="podcast-info">
+                        <div class="podcast-title">科技早知道</div>
+                        <div class="podcast-description">每日科技新闻速递，让你快速了解科技圈发生的大事小情</div>
+                    </div>
+                    <div class="play-button play-button-small">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                
+                <div class="podcast-list-item">
+                    <div class="podcast-cover-small">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkZCQTA4Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0ZGRkZGRiIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuS7o+eggOaXtuWIujwvdGV4dD48L3N2Zz4=" alt="代码时间">
+                    </div>
+                    <div class="podcast-info">
+                        <div class="podcast-title">代码时间</div>
+                        <div class="podcast-description">专注于编程技术分享，从入门到精通的编程学习之旅</div>
+                    </div>
+                    <div class="play-button play-button-small">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 空搜索结果 (默认隐藏) -->
+        <div class="empty-search" style="display: none;">
+            <i class="fas fa-search"></i>
+            <div class="message">未找到相关内容</div>
+            <div class="sub-message">尝试使用其他关键词搜索</div>
+        </div>
+    </div>
+    
+    <!-- 迷你播放器 -->
+    <div class="mini-player">
+        <div class="podcast-cover">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="播客封面">
+        </div>
+        <div class="podcast-info">
+            <div class="podcast-title">正在播放的节目标题</div>
+            <div class="podcast-creator">播客创作者</div>
+        </div>
+        <div class="controls">
+            <button class="play-pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="next">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-target="home.html">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="tab-item" data-target="subscription.html">
+            <i class="fas fa-headphones"></i>
+            <span>订阅</span>
+        </div>
+        <div class="tab-item active" data-target="search.html">
+            <i class="fas fa-search"></i>
+            <span>搜索</span>
+        </div>
+        <div class="tab-item" data-target="profile.html">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+    
+    <script src="js/common.js"></script>
+    <script>
+        // 简单的搜索交互逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const initialView = document.querySelector('.search-history').parentNode;
+            const searchResults = document.querySelector('.search-results');
+            const emptySearch = document.querySelector('.empty-search');
+            const cancelButton = document.querySelector('.cancel-button');
+            
+            // 监听搜索输入
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.trim();
+                
+                if (query.length > 0) {
+                    // 显示搜索结果，隐藏初始视图
+                    initialView.style.display = 'none';
+                    
+                    // 这里假设搜索"科技"有结果，其他搜索词无结果
+                    if (query.includes('科技')) {
+                        searchResults.style.display = 'block';
+                        emptySearch.style.display = 'none';
+                    } else {
+                        searchResults.style.display = 'none';
+                        emptySearch.style.display = 'flex';
+                    }
+                } else {
+                    // 恢复初始视图
+                    initialView.style.display = 'block';
+                    searchResults.style.display = 'none';
+                    emptySearch.style.display = 'none';
+                }
+            });
+            
+            // 取消按钮点击事件
+            cancelButton.addEventListener('click', function() {
+                searchInput.value = '';
+                initialView.style.display = 'block';
+                searchResults.style.display = 'none';
+                emptySearch.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html> 

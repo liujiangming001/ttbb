@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 播客App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <style>
+        .profile-header {
+            background-color: white;
+            padding: 20px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 35px;
+            overflow: hidden;
+            margin-right: 16px;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .profile-id {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .profile-stat {
+            margin-right: 16px;
+        }
+        
+        .profile-stat span {
+            font-weight: 600;
+            color: #333;
+            margin-right: 4px;
+        }
+        
+        .edit-profile {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .menu-list {
+            background-color: white;
+        }
+        
+        .menu-item {
+            display: flex;
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            color: #666;
+        }
+        
+        .menu-label {
+            flex: 1;
+            font-size: 16px;
+        }
+        
+        .menu-arrow {
+            color: #ccc;
+        }
+        
+        .logout-button {
+            margin: 20px 16px;
+            padding: 12px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            color: #ff4f5e;
+            font-weight: 600;
+        }
+        
+        .badge {
+            background-color: #ff4f5e;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+        
+        .subscription-status {
+            background-color: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .subscription-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #e0f2f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 12px;
+            color: #009688;
+        }
+        
+        .subscription-info {
+            flex: 1;
+        }
+        
+        .subscription-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .subscription-description {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .upgrade-button {
+            background-color: #ff4f5e;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS 状态栏 -->
+    <div class="ios-status-bar">
+        <div class="time">12:30</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- App 标题栏 -->
+    <div class="app-header">
+        <div class="header-left">
+            <!-- 空 -->
+        </div>
+        <div class="header-title font-bold">
+            我的
+        </div>
+        <div class="header-right">
+            <i class="fas fa-cog"></i>
+        </div>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="content-area" style="padding: 0;">
+        <!-- 个人资料 -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRjVGNUY1Ij48Y2lyY2xlIGN4PSIxMDAiIGN5PSI5MCIgcj0iNTAiIGZpbGw9IiM4REE5QzQiLz48cGF0aCBkPSJNMTAwLDE0MCBBMTAwLDEwMCAwIDAsMCAxNzAsMTAwIEgzMCBBMTAwLDEwMCAwIDAsMCAxMDAsMTQwIHoiIGZpbGw9IiM4REE5QzQiLz48L3N2Zz4=" alt="用户头像">
+            </div>
+            <div class="profile-info">
+                <div class="profile-name">张三</div>
+                <div class="profile-id">ID: podcast_user_123</div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span>24</span>关注
+                    </div>
+                    <div class="profile-stat">
+                        <span>128</span>粉丝
+                    </div>
+                </div>
+            </div>
+            <div class="edit-profile">
+                <i class="fas fa-edit"></i>
+            </div>
+        </div>
+        
+        <!-- 会员状态 -->
+        <div class="subscription-status">
+            <div class="subscription-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="subscription-info">
+                <div class="subscription-title">普通用户</div>
+                <div class="subscription-description">升级到会员，解锁更多收听特权</div>
+            </div>
+            <div class="upgrade-button">升级</div>
+        </div>
+        
+        <!-- 我的收藏 -->
+        <div class="user-favorite">
+            <div class="favorite-header">
+                <div class="favorite-title">我的收藏</div>
+                <div class="favorite-count">24个播客</div>
+            </div>
+            <div class="favorite-preview">
+                <div class="preview-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="收藏播客1">
+                </div>
+                <div class="preview-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojOERBOUM0Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0VFRjRFRCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS6jDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="收藏播客2">
+                </div>
+                <div class="preview-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkZCQTA4Ij48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0ZGRkZGRiIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4iea1tzwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="收藏播客3">
+                </div>
+                <div class="preview-item">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojNkI5MDgwIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0NDRTNERSIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuWbm+W6lDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="收藏播客4">
+                </div>
+                <div class="preview-more">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 我的内容 -->
+        <div class="section-title">我的内容</div>
+        <div class="menu-list">
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="menu-label">收听历史</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="menu-label">下载管理</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="menu-label">我的收藏</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+                <div class="menu-label">播放列表</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 账户与服务 -->
+        <div class="section-title">账户与服务</div>
+        <div class="menu-list">
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="menu-label">消息中心<span class="badge">3</span></div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="menu-label">我的钱包</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="menu-label">设置</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-headphones-alt"></i>
+                </div>
+                <div class="menu-label">帮助与反馈</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 退出登录 -->
+        <div class="logout-button">
+            退出登录
+        </div>
+    </div>
+    
+    <!-- 迷你播放器 -->
+    <div class="mini-player">
+        <div class="podcast-cover">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojRkY1RTVCIj48Y2lyY2xlIGN4PSIyMDAiIGN5PSIyMDAiIHI9IjEzMCIgZmlsbD0iI0Q4RDhEOCIvPjx0ZXh0IHg9IjIwMCIgeT0iMjAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMTUiPuaSreaUvuS4gDwvdGV4dD48dGV4dCB4PSIyMDAiIHk9IjI0MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7npLrkvovlsIblj4s8L3RleHQ+PC9zdmc+" alt="播客封面">
+        </div>
+        <div class="podcast-info">
+            <div class="podcast-title">正在播放的节目标题</div>
+            <div class="podcast-creator">播客创作者</div>
+        </div>
+        <div class="controls">
+            <button class="play-pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="next">
+                <i class="fas fa-forward"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="bottom-tab-bar">
+        <div class="tab-item" data-target="home.html">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="tab-item" data-target="subscription.html">
+            <i class="fas fa-headphones"></i>
+            <span>订阅</span>
+        </div>
+        <div class="tab-item" data-target="search.html">
+            <i class="fas fa-search"></i>
+            <span>搜索</span>
+        </div>
+        <div class="tab-item active" data-target="profile.html">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+    
+    <script src="js/common.js"></script>
+</body>
+</html>
